@@ -15,7 +15,6 @@ import { useLockedSale, useRbs } from 'hooks/useContract'
 import Web3 from 'web3'
 import UnlockButton from 'components/UnlockButton'
 import Divider from './components/Divider'
-import { values } from 'lodash'
 
 export interface FarmsProps {
   tokenMode?: boolean
