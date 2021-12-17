@@ -16,7 +16,7 @@ import {
   getRbsTokenAddress,
   getWbnbAddress,
 } from 'utils/addressHelpers'
-import { useLockedSale, useRbs } from 'hooks/useContract'
+import { useBusd, useLockedSale, useRbs } from 'hooks/useContract'
 import Web3 from 'web3'
 import UnlockButton from 'components/UnlockButton'
 import Divider from './components/Divider'
@@ -42,6 +42,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const busdAddress = getBusdAddress()
   const lockedSale = useLockedSale(addressx)
   const rbsContract = useRbs()
+  const busdContract = useBusd()
   const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
   const [discountedPrice, setDiscountedPrice] = useState('') // fromweiden string dönüyor numbera çevirmedim bi matematik işlemi yapmayacağımız için
   const [showExpandableSection, setShowExpandableSection] = useState(false)
@@ -75,7 +76,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
 
     const getAllowance = async () => {
       if (account) {
-        const isAllowed = await rbsContract.methods.allowance(addressx, account).call()
+        const isAllowed = await busdContract.methods.allowance(addressx, account).call()
         setAllowance(isAllowed)
         console.log(isAllowed)
       } else {
@@ -141,7 +142,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   }
 
   const letAllowance = async () => {
-    await rbsContract.methods
+    await busdContract.methods
       .approve(
         account,
         '115792089237316195423570985008687907853269984665640564039457584007913129639935',

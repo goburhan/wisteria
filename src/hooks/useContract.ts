@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { AbiItem } from 'web3-utils'
 import { ContractOptions } from 'web3-eth-contract'
 import useWeb3 from 'hooks/useWeb3'
-import { getMasterChefAddress, getCakeAddress, getLotteryAddress, getLotteryTicketAddress, getDelegateContractAddress, getLockedSaleAddress, getRbsTokenAddress } from 'utils/addressHelpers'
+import { getMasterChefAddress, getCakeAddress, getLotteryAddress, getLotteryTicketAddress, getDelegateContractAddress, getLockedSaleAddress, getRbsTokenAddress, getBusdAddress } from 'utils/addressHelpers'
 import { poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
 import ifo from 'config/abi/ifo.json'
@@ -98,6 +98,9 @@ export const useIfoContract = (address: string) => {
 
 export const useRbs = () => {
   return useERC20(getRbsTokenAddress())
+}
+export const useBusd = () => {
+  return useERC20(getBusdAddress())
 }
 
 export default useContract
