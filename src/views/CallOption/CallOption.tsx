@@ -57,6 +57,8 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const [pickasset, setContract] = useState()
   const [allow, setAllowance] = useState()
 
+  const [buyTokenWBNB, setBuyTokenWBNB] = useState(false); // true ise wbnb ile alacak default busd.
+
   useEffect(() => {
     const getClaimList = async () => {
       if (account) {
@@ -157,6 +159,16 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
     await lockedSale.methods.buyToken(amount, busdOrWst).send({ from: account })
   }
 
+  const buyWithWBNB = async (amount) => {
+    // amount wei cinsinden 18 haneli olmalı
+    await lockedSale.methods.buyToken(amount,'0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c').send({from : account})
+  }
+
+  const buyWithBUSD = async (amount) => {
+    await lockedSale.methods.buyToken(amount,'0xe9e7cea3dedca5984780bafc599bd69add087d56').send({from : account})
+  }
+ 
+
   return (
     <Page>
       <div className="grid grid-cols-12  mb-10">
@@ -174,11 +186,11 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
           <div className="grid grid-cols-2 mb-6  text-center">
             <div className="grid grid-cols-1 text-gray-300">
               Call Option(mint) Price
-              <div className="mt-2 text-white text-xl">{discountedPrice  } </div>
+              <div className="mt-2 text-white text-xl">{new BigNumber(discountedPrice).toFixed(4)  } </div>
             </div>
             <div className="grid grid-cols-1 text-gray-300 ">
               Market WST Price
-              <div className="mt-2 text-white text-xl">{tokenamount}</div>
+              <div className="mt-2 text-white text-xl">{new BigNumber(tokenamount).toFixed(4)}</div>
             </div>
           </div>
           <div className="grid grid-cols-2 mr-16 gap-6 text-white text-right  mb-2 text-center">
@@ -238,7 +250,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
               <Button
                 style={{ maxWidth: 300, marginLeft: 100 }}
                 type="submit"
-                onClick={async () => '/'}
+                onClick={async () => buyWithBUSD(Web3.utils.toWei(tokenamount, 'ether'))}
               >
                 Call option WST
               </Button>
@@ -293,10 +305,10 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
             </div>
             <div className="text-right grid grid-cols-1  text-white">
               <div>2222</div>
-              <div>{contbalance}</div>
-              <div>{contractbalance}</div>
+              <div>{contbalance ? Web3.utils.fromWei(contbalance) : 0} WST</div>
+              <div>{contractbalance} %</div>
               <div>{claimtime}</div>
-              <div>{minpurchase}</div>
+              <div>{minpurchase ? Web3.utils.fromWei(minpurchase) : 0} WST</div>
             </div>
           </div>
           <br />
