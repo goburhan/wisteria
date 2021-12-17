@@ -56,7 +56,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const [approve, setApprove] = useState()
   const [buytokken, setBuy] = useState({})
   const [pickasset, setContract] = useState()
-  const [allow, setAllowance] = useState()
+  const [allow, setAllowance] = useState(0)
 
   const [buyTokenWBNB, setBuyTokenWBNB] = useState(false); // true ise wbnb ile alacak default busd.
 
@@ -77,6 +77,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
     const getAllowance = async () => {
       if (account) {
         const isAllowed = await busdContract.methods.allowance(account, addressx).call()
+        console.log(`Allowance : ${isAllowed}`)
         setAllowance(isAllowed)
         console.log(isAllowed)
       } else {
@@ -244,21 +245,21 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
             name="amount"
           />
           <div className="grid grid-cols-2 mt-2 mb-4">
-            {allow === 0 ? (
-             
+            {allow > 0 ? (
+                           <Button
+                           style={{ maxWidth: 300, marginLeft: 100 }}
+                           type="submit"
+                           onClick={async () => buyWithBUSD(Web3.utils.toWei(tokenamount, 'ether'))}
+                         >
+                           Call option WST
+                         </Button>
+
+            ) : (
               <Button
                 style={{ maxWidth: 300, marginLeft: 100 }}
                 onClick={async () => letAllowance()}
               >
                 Approve
-              </Button>
-            ) : (
-              <Button
-                style={{ maxWidth: 300, marginLeft: 100 }}
-                type="submit"
-                onClick={async () => buyWithBUSD(Web3.utils.toWei(tokenamount, 'ether'))}
-              >
-                Call option WST
               </Button>
             )}
             <div className="dropdown place-items-end ml-24 inline-block relative">
