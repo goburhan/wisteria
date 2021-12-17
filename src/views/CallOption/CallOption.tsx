@@ -76,7 +76,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
 
     const getAllowance = async () => {
       if (account) {
-        const isAllowed = await busdContract.methods.allowance(addressx, account).call()
+        const isAllowed = await busdContract.methods.allowance(account, addressx).call()
         setAllowance(isAllowed)
         console.log(isAllowed)
       } else {
@@ -148,7 +148,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const letAllowance = async () => {
     await busdContract.methods
       .approve(
-        lockedSale,
+        addressx,
         '115792089237316195423570985008687907853269984665640564039457584007913129639935',
       )
       .send({ from: account })
