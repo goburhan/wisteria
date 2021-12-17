@@ -239,7 +239,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
             name="amount"
           />
           <div className="grid grid-cols-2 mt-2 mb-4">
-            {allow === 1 ? (
+            {allow !== 1 ? (
               <Button
                 style={{ maxWidth: 300, marginLeft: 100 }}
                 onClick={async () => letAllowance()}
