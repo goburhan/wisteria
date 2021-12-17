@@ -174,7 +174,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
           <div className="grid grid-cols-2 mb-6  text-center">
             <div className="grid grid-cols-1 text-gray-300">
               Call Option(mint) Price
-              <div className="mt-2 text-white text-xl">{discountedPrice}</div>
+              <div className="mt-2 text-white text-xl">{discountedPrice  } </div>
             </div>
             <div className="grid grid-cols-1 text-gray-300 ">
               Market WST Price
@@ -255,13 +255,13 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
               <div className="dropdown-content absolute hidden text-gray-700 pt-1">
                 <Button
                   name="busd"
-                  className=" bg-purple-300 hover:bg-purple-600 py-1 px-4  block whitespace-no-wrap"
+                  className=" bg-purple-300 hover:bg-purple-600 py-2 px-4  block whitespace-no-wrap"
                 >
                   <div className="grid grid-cols-2 place-items-center  gap-1">
                     <img
-                      src="/images/w-token.svg"
+                      src="/images/busd.svg"
                       alt="wtoken"
-                      style={{ maxWidth: 30 }}
+                      style={{ maxWidth: 28 }}
                     />
                     BUSD
                   </div>
