@@ -57,6 +57,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const [buytokken, setBuy] = useState({})
   const [pickasset, setContract] = useState()
   const [allow, setAllowance] = useState(0)
+  const [inputAmount, setInputAmount] = useState('');
 
   const [buyTokenWBNB, setBuyTokenWBNB] = useState(false); // true ise wbnb ile alacak default busd.
 
@@ -173,7 +174,9 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const buyWithBUSD = async (amount) => {
     await lockedSale.methods.buyToken(amount,'0xe9e7cea3dedca5984780bafc599bd69add087d56').send({from : account})
   }
- 
+  function handleChange(e) {
+    setInputAmount(e.target.value);
+    }
 
   return (
     <Page>
@@ -243,6 +246,9 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
             className="rbs-card w-full mt-2 h-8"
             placeholder="Amount"
             name="amount"
+            value={inputAmount}
+             onChange={handleChange}
+
           />
           <div className="grid grid-cols-2 mt-2 mb-4">
             {allow > 0 ? (
