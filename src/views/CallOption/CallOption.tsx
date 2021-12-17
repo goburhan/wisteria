@@ -129,7 +129,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
     getClaimList()
     getPrice()
     getRbsprice()
-  }, [account, lockedSale, addressx, rbsContract, busdAddress])
+  }, [account, lockedSale, addressx, busdContract, busdAddress])
 
   const ClaimExpand = styled.div<{ expanded: boolean }>`
     overflow: hidden;
