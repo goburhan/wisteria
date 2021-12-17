@@ -48,7 +48,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const [minpurchase, setMinp] = useState()
   const [contbalance, setContb] = useState()
   const [approve ,setApprove] = useState()
-  const [buytoken,setBuy] = useState({})
+  const [buytokken,setBuy] = useState({})
   const [pickasset ,setContract] = useState()
   const [allow ,setAllowance] = useState()
   
@@ -115,14 +115,10 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
       setContb(contractB)
     }
 
-  
-    const buyToken = async (busdOrWst, amount) => {
-      setBuy(values => ({...values, [busdOrWst]:amount}))
-      await lockedSale.methods.buyToken(amount,busdOrWst).send({from:account})
-
-    }
    
-
+  
+   
+   
     getAllowance()
     getContractBalance()
     getMpurch()
@@ -149,9 +145,21 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
     
   await rbsContract.methods.approve(account,"115792089237316195423570985008687907853269984665640564039457584007913129639935").send({from:account})
   }
-  const handleSubmit = (event) => {
-    event.preventDefault();
+
+  const  busdbnb = async (value) => {
+    const busdBnbAddr = value;
+    return busdBnbAddr
   }
+
+  
+  const buyTokens = async ( busdorbnb,amount) => {
+    
+    const busdOrWst = busdbnb(busdorbnb)
+    await lockedSale.methods.buyToken(amount,busdOrWst).send({from:account})
+
+  }
+
+
 
   return (
     <Page>
@@ -217,8 +225,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
 
 
 
-<form onSubmit={handleSubmit}>
-          <input type="text" className="rbs-card w-full mt-2 h-8" placeholder="Amount" name='amount' />
+          <input type="text" className="rbs-card w-full mt-2 h-8" placeholder="Amount"  name="amount"  />
           <div className="grid grid-cols-2 mt-2 mb-4">
           {allow === 1
            ? 
@@ -238,7 +245,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
     </button>
  
     <div className="dropdown-content absolute hidden text-gray-700 pt-1">
-      <Button value="tokenaddress" name="busd"  className="rounded-t bg-purple-300 hover:bg-purple-600 py-2 px-4 block whitespace-no-wrap" >
+      <Button  name="busd"  className="rounded-t bg-purple-300 hover:bg-purple-600 py-2 px-4 block whitespace-no-wrap" >
       <div className='grid grid-cols-2 place-items-center gap-6'>
       <img src="/images/w-token.svg"  alt="wtoken" style={{maxWidth:30}}/>
       BUSD
@@ -254,7 +261,6 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
       </div>
   </div>
           </div>
-          </form>
 
           <div className="grid grid-cols-2 mt-2">
             <div className="grid grid-cols-1 text-gray-300 gap-2 ">

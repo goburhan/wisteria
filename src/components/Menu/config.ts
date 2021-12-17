@@ -28,7 +28,7 @@ const config: MenuEntry[] = [
   {
     label: 'Call Option (1,1)',
     icon: 'NftIcon',
-    href:'/sssn'
+    href:'/calloption'
   },
   {
     label: 'IFO',
