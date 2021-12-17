@@ -10,7 +10,12 @@ import ethers from 'ethers'
 import useRefresh from 'hooks/useRefresh'
 import { Address, QuoteToken } from 'config/constants/types'
 import ExpandableSectionButton from 'components/ExpandableSectionButton/ClaimButton'
-import { getBusdAddress, getLockedSaleAddress, getRbsTokenAddress, getWbnbAddress } from 'utils/addressHelpers'
+import {
+  getBusdAddress,
+  getLockedSaleAddress,
+  getRbsTokenAddress,
+  getWbnbAddress,
+} from 'utils/addressHelpers'
 import { useLockedSale, useRbs } from 'hooks/useContract'
 import Web3 from 'web3'
 import UnlockButton from 'components/UnlockButton'
@@ -47,12 +52,11 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const [claimtime, setCtime] = useState()
   const [minpurchase, setMinp] = useState()
   const [contbalance, setContb] = useState()
-  const [approve ,setApprove] = useState()
-  const [buytokken,setBuy] = useState({})
-  const [pickasset ,setContract] = useState()
-  const [allow ,setAllowance] = useState()
-  
-  
+  const [approve, setApprove] = useState()
+  const [buytokken, setBuy] = useState({})
+  const [pickasset, setContract] = useState()
+  const [allow, setAllowance] = useState()
+
   useEffect(() => {
     const getClaimList = async () => {
       if (account) {
@@ -67,14 +71,13 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
       }
     }
 
-    const getAllowance = async () =>  {
-      if (account){
-        const isAllowed = await rbsContract.methods.allowance(addressx,account).call()
+    const getAllowance = async () => {
+      if (account) {
+        const isAllowed = await rbsContract.methods.allowance(addressx, account).call()
         setAllowance(isAllowed)
         console.log(isAllowed)
-      }
-      else{
-        console.log("not Logged in")
+      } else {
+        console.log('not Logged in')
       }
     }
 
@@ -115,10 +118,6 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
       setContb(contractB)
     }
 
-   
-  
-   
-   
     getAllowance()
     getContractBalance()
     getMpurch()
@@ -127,13 +126,11 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
     getClaimList()
     getPrice()
     getRbsprice()
-  }, [account, lockedSale, addressx,rbsContract,busdAddress])
-
-
+  }, [account, lockedSale, addressx, rbsContract, busdAddress])
 
   const ClaimExpand = styled.div<{ expanded: boolean }>`
-  overflow: hidden;
-    height: ${(props) => (props.expanded ? '35%' : '0px')}
+    overflow: hidden;
+    height: ${(props) => (props.expanded ? '35%' : '0px')};
   `
   const claimTokens = async (index) => {
     console.log('get token')
@@ -142,24 +139,23 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   }
 
   const letAllowance = async () => {
-    
-  await rbsContract.methods.approve(account,"115792089237316195423570985008687907853269984665640564039457584007913129639935").send({from:account})
+    await rbsContract.methods
+      .approve(
+        account,
+        '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+      )
+      .send({ from: account })
   }
 
-  const  busdbnb = async (value) => {
-    const busdBnbAddr = value;
+  const busdbnb = async (value) => {
+    const busdBnbAddr = value
     return busdBnbAddr
   }
 
-  
-  const buyTokens = async ( busdorbnb,amount) => {
-    
+  const buyTokens = async (busdorbnb, amount) => {
     const busdOrWst = busdbnb(busdorbnb)
-    await lockedSale.methods.buyToken(amount,busdOrWst).send({from:account})
-
+    await lockedSale.methods.buyToken(amount, busdOrWst).send({ from: account })
   }
-
-
 
   return (
     <Page>
@@ -194,7 +190,6 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
           </div>
 
           <ClaimExpand expanded={showExpandableSection}>
-           
             <div className="grid grid-cols-3 w-9/12  gap-2 h-auto claim-card">
               <div className="mb-6 text-gray-200">Claim Block </div>
               <div className="mb-6 text-gray-200">Amount </div>
@@ -206,60 +201,86 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
                   {element.amount > 0 ? (
                     <Button onClick={async () => claimTokens(index)}>Claim</Button>
                   ) : (
-                    <div  className=" bg-purple-900  min-w-max text-white text-center px-2  ml-6  py-2  rounded-xl texts  " >
+                    <div className=" bg-purple-900  min-w-max text-white text-center px-2  ml-6  py-2  rounded-xl texts  ">
                       Claimed
                     </div>
                   )}
-                  
                   <div hidden> Claim yapıldımı : {element.claimed}</div>
                 </>
               ))}
-                <>
-                {claimsx.length > 0 ? 
-                 <div >  </div> : 
-                <div className='col-start-2 text-purple-900 noclaim-card text-lg mb-4  text-center mr-6' >No Token for <br/> Claim  </div>}
-                </>
+              <>
+                {claimsx.length > 0 ? (
+                  <div> </div>
+                ) : (
+                  <div className="col-start-2 text-purple-900 noclaim-card text-lg mb-4  text-center mr-6">
+                    No Token for <br /> Claim{' '}
+                  </div>
+                )}
+              </>
             </div>
           </ClaimExpand>
 
-
-
-
-          <input type="text" className="rbs-card w-full mt-2 h-8" placeholder="Amount"  name="amount"  />
+          <input
+            type="text"
+            className="rbs-card w-full mt-2 h-8"
+            placeholder="Amount"
+            name="amount"
+          />
           <div className="grid grid-cols-2 mt-2 mb-4">
-          {allow === 1
-           ? 
-          <Button style={{   maxWidth: 300 , marginLeft: 100 }} onClick={async () => letAllowance()}>
-            Approve
-          </Button>
-          : 
-            <Button style={{   maxWidth: 300 , marginLeft: 100 }} type="submit" onClick={async () => '/'}>
-              Call option WST
-            </Button> 
-             }           
-  <div className="dropdown place-items-end ml-24 inline-block relative">
-    <button type="submit" className=" font-semibold w-24  rounded inline-flex items-center">
-    <span className="selectasset   flex justify-center items-center rounded-xl mr-2 hover:opacity-80 shadow-sm">
-            Select Assets
-    </span>
-    </button>
- 
-    <div className="dropdown-content absolute hidden text-gray-700 pt-1">
-      <Button  name="busd"  className="rounded-t bg-purple-300 hover:bg-purple-600 py-2 px-4 block whitespace-no-wrap" >
-      <div className='grid grid-cols-2 place-items-center gap-6'>
-      <img src="/images/w-token.svg"  alt="wtoken" style={{maxWidth:30}}/>
-      BUSD
-      </div>
-        </Button>
-      <Button value="tokenadress" className="bg-white hover:bg-purple-600 py-2 px-4 block whitespace-no-wrap" >
-      <div className='grid grid-cols-2 place-items-center gap-6'>
-      <img src="/images/w-token.svg" alt="wtoken" style={{maxWidth:30}}/>
-      BNB
-      </div>
-      </Button>
-          
-      </div>
-  </div>
+            {allow === 1 ? (
+              <Button
+                style={{ maxWidth: 300, marginLeft: 100 }}
+                onClick={async () => letAllowance()}
+              >
+                Approve
+              </Button>
+            ) : (
+              <Button
+                style={{ maxWidth: 300, marginLeft: 100 }}
+                type="submit"
+                onClick={async () => '/'}
+              >
+                Call option WST
+              </Button>
+            )}
+            <div className="dropdown place-items-end ml-24 inline-block relative">
+              <button
+                type="submit"
+                className=" font-semibold w-24  rounded inline-flex items-center"
+              >
+                <div className="selectasset text-white font-light text-md flex justify-center items-center rounded-xl mr-2 hover:opacity-80 shadow-sm">
+                  Select Assets
+                </div>
+              </button>
+              <div className="dropdown-content absolute hidden text-gray-700 pt-1">
+                <Button
+                  name="busd"
+                  className=" bg-purple-300 hover:bg-purple-600 py-1 px-4  block whitespace-no-wrap"
+                >
+                  <div className="grid grid-cols-2 place-items-center  gap-1">
+                    <img
+                      src="/images/w-token.svg"
+                      alt="wtoken"
+                      style={{ maxWidth: 30 }}
+                    />
+                    BUSD
+                  </div>
+                </Button>
+                <Button
+                  value="tokenadress"
+                  className="bg-white hover:bg-purple-600 py-2 px-4 block whitespace-no-wrap"
+                >
+                  <div className="grid grid-cols-2 place-items-center gap-6">
+                    <img
+                      src="/images/binance.svg"
+                      alt="wtoken"
+                      style={{ maxWidth: 30 }}
+                    />
+                    BNB
+                  </div>
+                </Button>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 mt-2">
