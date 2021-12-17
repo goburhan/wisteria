@@ -255,7 +255,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
                            <Button
                            style={{ maxWidth: 300, marginLeft: 100 }}
                            type="submit"
-                           onClick={async () => buyWithBUSD(Web3.utils.toWei(tokenamount, 'ether'))}
+                           onClick={async () => buyWithBUSD(Web3.utils.toWei(inputAmount, 'ether'))}
                          >
                            Call option WST
                          </Button>
