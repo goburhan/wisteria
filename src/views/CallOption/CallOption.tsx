@@ -121,6 +121,8 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
       setContb(contractB)
     }
 
+    
+
     getAllowance()
     getContractBalance()
     getMpurch()
@@ -141,6 +143,8 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
     await lockedSale.methods.claimTokens(index).send({ from: account })
   }
 
+  console.log(allow)
+      
   const letAllowance = async () => {
     await busdContract.methods
       .approve(
@@ -240,7 +244,8 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
             name="amount"
           />
           <div className="grid grid-cols-2 mt-2 mb-4">
-            {allow !== 1 ? (
+            {allow === 0 ? (
+             
               <Button
                 style={{ maxWidth: 300, marginLeft: 100 }}
                 onClick={async () => letAllowance()}
