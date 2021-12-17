@@ -31,3 +31,6 @@ export const getDelegateContractAddress = () => {
 export const getLockedSaleAddress = () => {
   return addresses.lockedsale[chainId]
 }
+export const getRbsTokenAddress = () => {
+  return addresses.rbs[chainId]
+}

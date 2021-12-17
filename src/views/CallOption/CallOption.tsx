@@ -1,24 +1,21 @@
 import React, { useEffect, useCallback, useState } from 'react'
 import { Link, Route, useRouteMatch } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import styled from 'styled-components'
 import { provider } from 'web3-core'
-import { Image, Heading } from '@macist-m/robinia-uikit'
-import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK, CAKE_POOL_PID } from 'config'
+import { Image, Heading, Button } from '@macist-m/robinia-uikit'
 import Page from 'components/layout/Page'
-import { useFarms, usePriceBnbBusd, usePriceCakeBusd, usePriceEthBnb } from 'state/hooks'
+import ethers from 'ethers'
 import useRefresh from 'hooks/useRefresh'
-import { fetchFarmUserDataAsync } from 'state/actions'
 import { Address, QuoteToken } from 'config/constants/types'
-import useI18n from 'hooks/useI18n'
 import ExpandableSectionButton from 'components/ExpandableSectionButton/ClaimButton'
-import { getBusdAddress, getLockedSaleAddress } from 'utils/addressHelpers'
-import { useLockedSale } from 'hooks/useContract'
+import { getBusdAddress, getLockedSaleAddress, getRbsTokenAddress, getWbnbAddress } from 'utils/addressHelpers'
+import { useLockedSale, useRbs } from 'hooks/useContract'
 import Web3 from 'web3'
-import DetailsSection from './components/FarmCard/DetailsSection'
+import UnlockButton from 'components/UnlockButton'
 import Divider from './components/Divider'
+import { values } from 'lodash'
 
 export interface FarmsProps {
   tokenMode?: boolean
@@ -40,6 +37,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const addressx = getLockedSaleAddress()
   const busdAddress = getBusdAddress()
   const lockedSale = useLockedSale(addressx)
+  const rbsContract = useRbs()
   const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
   const [discountedPrice, setDiscountedPrice] = useState('') // fromweiden string dönüyor numbera çevirmedim bi matematik işlemi yapmayacağımız için
   const [showExpandableSection, setShowExpandableSection] = useState(false)
@@ -49,10 +47,13 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const [contractbalance, setBalance] = useState()
   const [claimtime, setCtime] = useState()
   const [minpurchase, setMinp] = useState()
-
-
+  const [contbalance, setContb] = useState()
+  const [approve ,setApprove] = useState()
+  const [buytoken,setBuy] = useState({})
+  const [pickasset ,setContract] = useState()
+  const [allow ,setAllowance] = useState()
   
-
+  
   useEffect(() => {
     const getClaimList = async () => {
       if (account) {
@@ -67,6 +68,17 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
       }
     }
 
+    const getAllowance = async () =>  {
+      if (account){
+        const isAllowed = await rbsContract.methods.allowance(addressx,account).call()
+        setAllowance(isAllowed)
+        console.log(isAllowed)
+      }
+      else{
+        console.log("not Logged in")
+      }
+    }
+
     const getPrice = async () => {
       let price = await lockedSale.methods
         .getTokensOut(busdAddress, '1000000000000000000')
@@ -77,7 +89,9 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
     }
 
     const getRbsprice = async () => {
-      let rbs = await lockedSale.methods.getAmountOut(busdAddress,'1000000000000000000').call()
+      let rbs = await lockedSale.methods
+        .getAmountOut(busdAddress, '1000000000000000000')
+        .call()
       rbs = Web3.utils.fromWei(rbs, 'ether')
       setAmount(rbs)
     }
@@ -91,31 +105,60 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
       const time = await lockedSale.methods.claimTime().call()
       setCtime(time)
     }
-    
+
     const getMpurch = async () => {
       const minP = await lockedSale.methods.minAmount().call()
       setMinp(minP)
     }
 
+    const getContractBalance = async () => {
+      const contractB = await lockedSale.methods.getContractBalance().call()
+      setContb(contractB)
+    }
+
+  
+    const buyToken = async (busdOrWst, amount) => {
+      setBuy(values => ({...values, [busdOrWst]:amount}))
+      await lockedSale.methods.buyToken(amount,busdOrWst).send({from:account})
+
+    }
+   
+
+    getAllowance()
+    getContractBalance()
     getMpurch()
     getCtime()
     getBalance()
     getClaimList()
     getPrice()
     getRbsprice()
-  }, [account, lockedSale, busdAddress])
+  }, [account, lockedSale, addressx,rbsContract,busdAddress])
+
+
 
   const ClaimExpand = styled.div<{ expanded: boolean }>`
-    height: ${(props) => (props.expanded ? '36%' : '0px')};
-    overflow: hidden;
+  overflow: hidden;
+    height: ${(props) => (props.expanded ? '35%' : '0px')}
   `
+  const claimTokens = async (index) => {
+    console.log('get token')
+    console.log(account)
+    await lockedSale.methods.claimTokens(index).send({ from: account })
+  }
 
- 
+  const letAllowance = async () => {
+    
+  await rbsContract.methods.approve(account,"115792089237316195423570985008687907853269984665640564039457584007913129639935").send({from:account})
+  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  }
+
   return (
     <Page>
       <div className="grid grid-cols-12  mb-10">
-        <div className="col-span-9 col-start-3  rbs-card">
-          <div className="mb-6">ayarlar eklenecek</div>
+        <div className="col-span-9 col-start-3 h-fit rbs-card">
+          <div className="mb-6"> </div>
           <div className="grid grid-cols-9 mb-6 ">
             <img
               src="/images/w-token.svg"
@@ -128,11 +171,11 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
           <div className="grid grid-cols-2 mb-6  text-center">
             <div className="grid grid-cols-1 text-gray-300">
               Call Option(mint) Price
-              <div className="mt-2 text-white text-xl">{discountedPrice }</div>
+              <div className="mt-2 text-white text-xl">{discountedPrice}</div>
             </div>
             <div className="grid grid-cols-1 text-gray-300 ">
               Market WST Price
-              <div className="mt-2 text-white text-xl">$1231231</div>
+              <div className="mt-2 text-white text-xl">{tokenamount}</div>
             </div>
           </div>
           <div className="grid grid-cols-2 mr-16 gap-6 text-white text-right  mb-2 text-center">
@@ -144,6 +187,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
           </div>
 
           <ClaimExpand expanded={showExpandableSection}>
+           
             <div className="grid grid-cols-3 w-9/12  gap-2 h-auto claim-card">
               <div className="mb-6 text-gray-200">Claim Block </div>
               <div className="mb-6 text-gray-200">Amount </div>
@@ -151,28 +195,67 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
               {claimsx.map((element, index) => (
                 <>
                   <div className="mb-6 text-white">{element.claimBlock}</div>
-                  <div className="mb-6 text-white">{element.amount}% </div>
-                    {' '}
-                    {element.amount > 0 ? (
-                      <Link
-                        className="bg-purple-900 h-8 w-24  text-center  ml-10 py-1 px-6  rounded-xl  text-sm  text-white cursor-pointer hover:opacity-75 "
-                        to="/farms"
-                      >
-                        Claim
-                      </Link>
-                    ) : (
-                      <div className=" bg-purple-900  text-white text-center px-2  ml-6  py-2  rounded-xl  ">
-                        NotClaimable
-                      </div>
-                    )}
-                    
-
+                  <div className="mb-6 text-white">{element.amount}% </div>{' '}
+                  {element.amount > 0 ? (
+                    <Button onClick={async () => claimTokens(index)}>Claim</Button>
+                  ) : (
+                    <div  className=" bg-purple-900  min-w-max text-white text-center px-2  ml-6  py-2  rounded-xl texts  " >
+                      Claimed
+                    </div>
+                  )}
+                  
                   <div hidden> Claim yapıldımı : {element.claimed}</div>
                 </>
               ))}
+                <>
+                {claimsx.length > 0 ? 
+                 <div >  </div> : 
+                <div className='col-start-2 text-purple-900 noclaim-card text-lg mb-4  text-center mr-6' >No Token for <br/> Claim  </div>}
+                </>
             </div>
           </ClaimExpand>
-          <input type="text" className="rbs-card w-full  h-8" placeholder="Amount" />
+
+
+
+
+<form onSubmit={handleSubmit}>
+          <input type="text" className="rbs-card w-full mt-2 h-8" placeholder="Amount" name='amount' />
+          <div className="grid grid-cols-2 mt-2 mb-4">
+          {allow === 1
+           ? 
+          <Button style={{   maxWidth: 300 , marginLeft: 100 }} onClick={async () => letAllowance()}>
+            Approve
+          </Button>
+          : 
+            <Button style={{   maxWidth: 300 , marginLeft: 100 }} type="submit" onClick={async () => '/'}>
+              Call option WST
+            </Button> 
+             }           
+  <div className="dropdown place-items-end ml-24 inline-block relative">
+    <button type="submit" className=" font-semibold w-24  rounded inline-flex items-center">
+    <span className="selectasset   flex justify-center items-center rounded-xl mr-2 hover:opacity-80 shadow-sm">
+            Select Assets
+    </span>
+    </button>
+ 
+    <div className="dropdown-content absolute hidden text-gray-700 pt-1">
+      <Button value="tokenaddress" name="busd"  className="rounded-t bg-purple-300 hover:bg-purple-600 py-2 px-4 block whitespace-no-wrap" >
+      <div className='grid grid-cols-2 place-items-center gap-6'>
+      <img src="/images/w-token.svg"  alt="wtoken" style={{maxWidth:30}}/>
+      BUSD
+      </div>
+        </Button>
+      <Button value="tokenadress" className="bg-white hover:bg-purple-600 py-2 px-4 block whitespace-no-wrap" >
+      <div className='grid grid-cols-2 place-items-center gap-6'>
+      <img src="/images/w-token.svg" alt="wtoken" style={{maxWidth:30}}/>
+      BNB
+      </div>
+      </Button>
+          
+      </div>
+  </div>
+          </div>
+          </form>
 
           <div className="grid grid-cols-2 mt-2">
             <div className="grid grid-cols-1 text-gray-300 gap-2 ">
@@ -183,12 +266,11 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
               <div>Minimum Purchase</div>
             </div>
             <div className="text-right grid grid-cols-1  text-white">
-              <div>{tokenamount}</div>
-              <div>Price 3</div>
+              <div>2222</div>
+              <div>{contbalance}</div>
               <div>{contractbalance}</div>
               <div>{claimtime}</div>
               <div>{minpurchase}</div>
-              
             </div>
           </div>
           <br />

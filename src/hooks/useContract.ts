@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { AbiItem } from 'web3-utils'
 import { ContractOptions } from 'web3-eth-contract'
 import useWeb3 from 'hooks/useWeb3'
-import { getMasterChefAddress, getCakeAddress, getLotteryAddress, getLotteryTicketAddress, getDelegateContractAddress, getLockedSaleAddress } from 'utils/addressHelpers'
+import { getMasterChefAddress, getCakeAddress, getLotteryAddress, getLotteryTicketAddress, getDelegateContractAddress, getLockedSaleAddress, getRbsTokenAddress } from 'utils/addressHelpers'
 import { poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
 import ifo from 'config/abi/ifo.json'
@@ -17,6 +17,7 @@ import sousChef from 'config/abi/sousChef.json'
 import sousChefBnb from 'config/abi/sousChefBnb.json'
 import delegateFarm from 'config/abi/delegateFarm.json'
 import lockedsale from 'config/abi/lockedsale.json'
+import { add } from 'lodash'
 
 const useContract = (abi: AbiItem, address: string, contractOptions?: ContractOptions) => {
   const web3 = useWeb3()
@@ -93,6 +94,10 @@ export const useLockedSale = (address : string) => {
 export const useIfoContract = (address: string) => {
   const ifoAbi = (ifo as unknown) as AbiItem
   return useContract(ifoAbi, address)
+}
+
+export const useRbs = () => {
+  return useERC20(getRbsTokenAddress())
 }
 
 export default useContract

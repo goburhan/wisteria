@@ -24,8 +24,8 @@ export default {
     97: '',
   },
   lockedsale:{
-    56:'0x871448DfeA7841D662D4D7a7d88439Ce3DD6CAa9',
-    97:'0x871448DfeA7841D662D4D7a7d88439Ce3DD6CAa9'
+    56:'0xa2f3B8935836cf6C6452Dd20D7EdCEC83C39ad4e',
+    97:'0xa2f3B8935836cf6C6452Dd20D7EdCEC83C39ad4e'
   },
   
   mulltiCall: {

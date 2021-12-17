@@ -66,6 +66,13 @@ const GlobalStyle = createGlobalStyle`
     max-width:25px;
     margin-right:5px;
   }
+  .selectasset {
+    background: rgba(235, 226, 255, 0.39);
+    height: 45px;
+    width:100px;
+    min-width:30px;
+    margin-right:5px;
+  }
 
   .footer-right{
     padding: 25px;
@@ -130,6 +137,24 @@ const GlobalStyle = createGlobalStyle`
         margin: 0 auto;
     }
   }
+  .noclaim-card{
+    background: rgba(212, 211, 255, 0.4);
+    border-style : solid;
+    padding:8px;
+    border-color: white;
+    border-width: 1.5px;
+    border-radius: 30px;
+
+    box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.05);
+    margin-left: 6px;
+    margin-right: 6px;
+    ${({ theme }) => theme.mediaQueries.sm} {
+      margin: 0 auto;
+    }
+    ${({ theme }) => theme.mediaQueries.lg} {
+      margin: 0 auto;
+  }
+}
   
   .slick-list> div {
     margin-left:0;
