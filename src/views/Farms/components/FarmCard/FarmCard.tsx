@@ -175,7 +175,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice,ethPrice ,
   return (
     <div>
       {farm.tokenSymbol === 'RBS' ?
-    <FCardSolo  >
+    <FCard  >
       <CardHeading
         lpLabel={lpLabel}
         multiplier={farm.multiplier}
@@ -245,7 +245,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice,ethPrice ,
           tokenAddresses={tokenAddresses}
         />
       </ExpandingWrapper>
-    </FCardSolo>
+    </FCard>
      : 
     <FCard  >
       {farm.tokenSymbol === 'sss' && <StyledCardAccent />}

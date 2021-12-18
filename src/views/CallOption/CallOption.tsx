@@ -258,8 +258,8 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
 
             ) : (
               <Button
-              className='md:ml-24 lg:ml-32'
-                style={{ minWidth: 210, maxWidth:240 }}
+              className='sm:ml-4 md:ml-24 lg:ml-36'
+                style={{ minWidth: 240, maxWidth:260 }}
                 onClick={async () => letAllowance()}
             
               >
