@@ -287,7 +287,8 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
             <div className="text-right grid grid-cols-1  text-white">
               <div>{busdBalanc} BUSD</div>
               <div>{contbalance ? Web3.utils.fromWei(contbalance) : 0} WST</div>
-              <div>{contractbalance} %</div>
+              <div>{new BigNumber(contractbalance).div(10).toNumber()} %</div>
+              
               <div>{claimtime} Blocks</div>
               <div>{minpurchase ? Web3.utils.fromWei(minpurchase) : 0} WST</div>
             </div>
