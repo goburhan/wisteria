@@ -122,8 +122,6 @@ const GlobalStyle = createGlobalStyle`
   .claim-card{
       background: rgba(212, 211, 255, 0.4);
       padding: 25px;
-      border-style : solid;
-      border-color: white;
       border-width: 1.5px;
       border-radius: 30px;
   

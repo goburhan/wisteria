@@ -137,7 +137,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
 
   const ClaimExpand = styled.div<{ expanded: boolean }>`
     overflow: hidden;
-    height: ${(props) => (props.expanded ? '35%' : '0px')};
+    height: ${(props) => (props.expanded ? '34%' : '0px')};
   `
   const claimTokens = async (index) => {
     console.log('get token')
@@ -181,7 +181,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   return (
     <Page>
       <div className="grid grid-cols-12  mb-10">
-        <div className="col-span-9 col-start-3 h-fit rbs-card">
+        <div className="col-span-9 col-start-3  max-h-fit rbs-card">
           <div className="mb-6"> </div>
           <div className="grid grid-cols-9 mb-6 ">
             <img
@@ -211,18 +211,20 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
           </div>
 
           <ClaimExpand expanded={showExpandableSection}>
-            <div className="grid grid-cols-3 w-9/12  gap-2 h-auto claim-card">
+            <div className="grid grid-cols-3 w-9/12  overflow-auto  gap-1  max-h-56 claim-card">
               <div className="mb-6 text-gray-200">Claim Block </div>
               <div className="mb-6 text-gray-200">Amount </div>
-              <div className="mb-6 ml-10 text-gray-200"> Claim </div>
+              <div className="mb-6 ml-8 text-gray-200"> Claim </div>
               {claimsx.map((element, index) => (
                 <>
                   <div className="mb-6 text-white">{element.claimBlock}</div>
-                  <div className="mb-6 text-white">{element.amount}% </div>{' '}
+                  <div className="text-white">{Web3.utils.toWei(element.amount,'noether')}% </div>
+
                   {element.amount > 0 ? (
-                    <Button onClick={async () => claimTokens(index)}>Claim</Button>
+                      
+                    <Button style={{ maxWidth: 75, maxHeight:25, marginLeft:15 }} onClick={async () => claimTokens(index)}>Claim</Button>
                   ) : (
-                    <div className=" bg-purple-900  min-w-max text-white text-center px-2  ml-6  py-2  rounded-xl texts  ">
+                    <div className="text-white mb-6 text-center px-2      rounded-xl   ">
                       Claimed
                     </div>
                   )}
@@ -247,10 +249,10 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
             placeholder="Amount"
             name="amount"
             value={inputAmount}
-             onChange={handleChange}
+            onChange={handleChange}
 
           />
-          <div className="grid grid-cols-2 mt-2 mb-4">
+          <div className="grid grid-cols-1 mt-2 mb-4">
             {allow > 0 ? (
                            <Button
                            style={{ maxWidth: 300, marginLeft: 100 }}
@@ -262,50 +264,15 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
 
             ) : (
               <Button
-                style={{ maxWidth: 300, marginLeft: 100 }}
+                style={{ minWidth: 300, marginLeft:90 }}
                 onClick={async () => letAllowance()}
+                
+                
               >
                 Approve
               </Button>
             )}
-            <div className="dropdown place-items-end ml-24 inline-block relative">
-              <button
-                type="submit"
-                className=" font-semibold w-24  rounded inline-flex items-center"
-              >
-                <div className="selectasset text-white font-light text-md flex justify-center items-center rounded-xl mr-2 hover:opacity-80 shadow-sm">
-                  Select Assets
-                </div>
-              </button>
-              <div className="dropdown-content absolute hidden text-gray-700 pt-1">
-                <Button
-                  name="busd"
-                  className=" bg-purple-300 hover:bg-purple-600 py-2 px-4  block whitespace-no-wrap"
-                >
-                  <div className="grid grid-cols-2 place-items-center  gap-1">
-                    <img
-                      src="/images/busd.svg"
-                      alt="wtoken"
-                      style={{ maxWidth: 28 }}
-                    />
-                    BUSD
-                  </div>
-                </Button>
-                <Button
-                  value="tokenadress"
-                  className="bg-white hover:bg-purple-600 py-2 px-4 block whitespace-no-wrap"
-                >
-                  <div className="grid grid-cols-2 place-items-center gap-6">
-                    <img
-                      src="/images/binance.svg"
-                      alt="wtoken"
-                      style={{ maxWidth: 30 }}
-                    />
-                    BNB
-                  </div>
-                </Button>
-              </div>
-            </div>
+            
           </div>
 
           <div className="grid grid-cols-2 mt-2">
@@ -320,7 +287,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
               <div>2222</div>
               <div>{contbalance ? Web3.utils.fromWei(contbalance) : 0} WST</div>
               <div>{contractbalance} %</div>
-              <div>{claimtime}</div>
+              <div>{claimtime} Blocks</div>
               <div>{minpurchase ? Web3.utils.fromWei(minpurchase) : 0} WST</div>
             </div>
           </div>
