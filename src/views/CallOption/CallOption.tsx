@@ -175,7 +175,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
 
   return (
     <Page>
-      <div className="grid grid-cols-12  mb-10">
+      <div className="grid grid-cols-12  mb-32">
         <div className="col-span-9 col-start-3  max-h-fit rbs-card">
           <div className="grid grid-cols-9 mb-2 ">
             <img
