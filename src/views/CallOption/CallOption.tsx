@@ -53,6 +53,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
   const [minpurchase, setMinp] = useState()
   const [contbalance, setContb] = useState()
   const [approve, setApprove] = useState()
+  const [busdBalanc, setBusdBalance] = useState()
   const [buytokken, setBuy] = useState({})
   const [pickasset, setContract] = useState()
   const [allow, setAllowance] = useState(0)
@@ -122,8 +123,14 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
       setContb(contractB)
     }
 
-    
+    const getBusdBalance = async () => {
+  
+      const busdbalance = await busdContract.methods.balanceOf(account).call()
+      setBusdBalance(busdbalance)
+    }
 
+    
+    getBusdBalance()
     getAllowance()
     getContractBalance()
     getMpurch()
@@ -278,7 +285,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
               <div>Minimum Purchase</div>
             </div>
             <div className="text-right grid grid-cols-1  text-white">
-              <div>2222</div>
+              <div>{busdBalanc} BUSD</div>
               <div>{contbalance ? Web3.utils.fromWei(contbalance) : 0} WST</div>
               <div>{contractbalance} %</div>
               <div>{claimtime} Blocks</div>
