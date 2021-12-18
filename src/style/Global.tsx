@@ -137,10 +137,7 @@ const GlobalStyle = createGlobalStyle`
   }
   .noclaim-card{
     background: rgba(212, 211, 255, 0.4);
-    border-style : solid;
-    padding:8px;
-    border-color: white;
-    border-width: 1.5px;
+    padding:12px;
     border-radius: 30px;
 
     box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.05);

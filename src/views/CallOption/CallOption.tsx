@@ -19,7 +19,6 @@ import {
 import { useBusd, useLockedSale, useRbs } from 'hooks/useContract'
 import Web3 from 'web3'
 import UnlockButton from 'components/UnlockButton'
-import Divider from './components/Divider'
 
 export interface FarmsProps {
   tokenMode?: boolean
@@ -66,7 +65,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
       if (account) {
         // account değerini kendi cüzdanımla değiştim bunu account olarak güncellemeliyiz.
         const userClaims = await lockedSale.methods
-          .getUsersClaims('0x37B4Ef9c27c50B53a47b84B05C4688BB7ADB7AC0')
+          .getUsersClaims(account)
           .call()
         setClaimsx(userClaims)
         console.log(userClaims)
@@ -161,11 +160,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
     return busdBnbAddr
   }
 
-  const buyTokens = async (busdorbnb, amount) => {
-    const busdOrWst = busdbnb(busdorbnb)
-    await lockedSale.methods.buyToken(amount, busdOrWst).send({ from: account })
-  }
-
+ 
   const buyWithWBNB = async (amount) => {
     // amount wei cinsinden 18 haneli olmalı
     await lockedSale.methods.buyToken(amount,'0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c').send({from : account})
@@ -182,15 +177,14 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
     <Page>
       <div className="grid grid-cols-12  mb-10">
         <div className="col-span-9 col-start-3  max-h-fit rbs-card">
-          <div className="mb-6"> </div>
-          <div className="grid grid-cols-9 mb-6 ">
+          <div className="grid grid-cols-9 mb-2 ">
             <img
               src="/images/w-token.svg"
-              className="col-start-4"
+              className="col-start-4 "
               style={{ maxWidth: 50 }}
               alt="call"
             />
-            <div className="text-purple-900 mt-2 text-3xl">WST</div>
+            <div className="text-purple-900 sm:ml-6 md:ml-0 mt-2 text-3xl">WST</div>
           </div>
           <div className="grid grid-cols-2 mb-6  text-center">
             <div className="grid grid-cols-1 text-gray-300">
@@ -235,7 +229,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
                 {claimsx.length > 0 ? (
                   <div> </div>
                 ) : (
-                  <div className="col-start-2 text-purple-900 noclaim-card text-lg mb-4  text-center mr-6">
+                  <div className="col-start-1 col-span-3 text-purple-900 noclaim-card text-lg   text-center">
                     No Token for <br /> Claim{' '}
                   </div>
                 )}
@@ -252,10 +246,10 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
             onChange={handleChange}
 
           />
-          <div className="grid grid-cols-1 mt-2 mb-4">
+          <div className="  mt-2 ">
             {allow > 0 ? (
                            <Button
-                           style={{ maxWidth: 300, marginLeft: 100 }}
+                           style={{ maxWidth: 300, marginLeft: 90 }}
                            type="submit"
                            onClick={async () => buyWithBUSD(Web3.utils.toWei(inputAmount, 'ether'))}
                          >
@@ -264,10 +258,10 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
 
             ) : (
               <Button
-                style={{ minWidth: 300, marginLeft:90 }}
+              className='md:ml-24 lg:ml-32'
+                style={{ minWidth: 300, maxWidth:300 }}
                 onClick={async () => letAllowance()}
-                
-                
+            
               >
                 Approve
               </Button>
