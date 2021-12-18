@@ -212,7 +212,7 @@ const CallOption: React.FC<FarmsProps> = (farmsProps) => {
               {claimsx.map((element, index) => (
                 <>
                   <div className="mb-6 text-white">{element.claimBlock}</div>
-                  <div className="text-white">{Web3.utils.toWei(element.amount,'noether')}% </div>
+                  <div className="text-white">{Web3.utils.toWei(element.amount,'ether')}% </div>
 
                   {element.amount > 0 ? (
                       
